@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>⚡ SHADOW LEGENDS | Pro Tournament Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0c1a, #03050b);
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            color: #eef2ff;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .hero {
+            background: linear-gradient(105deg, #0e0f2c 0%, #12142e 100%);
+            border-radius: 1.5rem;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            border: 1px solid #4f46e5;
+            box-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-area h1 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #c4b5fd, #a78bfa, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-area p {
+            font-size: 0.6rem;
+            color: #8b8dc9;
+        }
+
+        .secret-hint {
+            font-size: 0.65rem;
+            background: #1a1c3b;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .secret-hint:hover {
+            background: #2a2c5a;
+        }
+
+        .admin-bar {
+            display: none;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+        .admin-bar.visible { display: flex; justify-content: flex-end; }
+        .mode-switch {
+            background: #0c0d24;
+            border-radius: 2rem;
+            padding: 0.2rem;
+            display: flex;
+            gap: 0.2rem;
+        }
+        .mode-btn {
+            background: transparent;
+            border: none;
+            padding: 0.3rem 1rem;
+            border-radius: 1.5rem;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #b9b3ff;
+            cursor: pointer;
+        }
+        .mode-btn.active {
+            background: linear-gradient(95deg, #6d28d9, #7c3aed);
+            color: white;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(8, 9, 21, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.6rem 0.5rem;
+            border-top: 1px solid #4f46e5;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #a5b4fc;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .nav-btn i { font-size: 1.2rem; }
+        .nav-btn.active { background: #4f46e5; color: white; box-shadow: 0 0 10px #6366f1; }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+            padding-bottom: 70px;
+        }
+        .page.active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card {
+            background: rgba(10, 11, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 1.2rem;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .card-header {
+            background: rgba(0, 0, 0, 0.45);
+            padding: 0.8rem 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #4f46e5;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #4f46e5, #7c3aed);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            min-height: 44px;
+            transition: 0.2s;
+        }
+        .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
+        
+        .btn-secondary {
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid #6366f1;
+            color: #a5b4fc;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(79, 70, 229, 0.4); }
+        
+        .btn-success {
+            background: linear-gradient(95deg, #10b981, #059669);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .btn-success:hover { transform: translateY(-2px); filter: brightness(1.05); }
+        
+        .btn-danger {
+            background: linear-gradient(95deg, #dc2626, #b91c1c);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-danger:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
+        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 550px;
+        }
+        .standings-table th {
+            background: #0e0f2c;
+            padding: 0.8rem 0.3rem;
+            font-size: 0.7rem;
+        }
+        .standings-table td {
+            padding: 0.7rem 0.3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            border-bottom: 1px solid #262a4e;
+        }
+
+        .matches-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+        
+        .match-card {
+            background: linear-gradient(135deg, #0f112b, #0a0b21);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #4f46e5;
+            transition: 0.2s;
+            width: 100%;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        .match-card.played {
+            border-left: 5px solid #10b981;
+            border-top: 1px solid #10b981;
+        }
+        
+        .vs-container {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .team-names {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .team-box {
+            flex: 1;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            padding: 0.8rem;
+            border-radius: 1rem;
+        }
+        
+        .team-name {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .vs-divider {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #c084fc;
+            background: #1e1e3a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+        }
+        
+        .score-section {
+            background: #010116;
+            border-radius: 1rem;
+            padding: 0.6rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .score-input-group {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #1e2048;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+        }
+        
+        .score-input-group label {
+            font-size: 0.7rem;
+            color: #a5b4fc;
+        }
+        
+        .score-inp {
+            width: 55px;
+            background: #010116;
+            border: 1px solid #6c6fdc;
+            border-radius: 0.8rem;
+            padding: 0.5rem;
+            text-align: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .gold-section {
+            background: linear-gradient(95deg, #1a1c3a, #12142e);
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .gold-card {
+            background: #0b0c20;
+            border-radius: 1rem;
+            padding: 0.6rem 1.2rem;
+            min-width: 140px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .gold-card .team-name-small {
+            font-size: 0.7rem;
+            color: #c084fc;
+            margin-bottom: 0.3rem;
+        }
+        
+        .gold-card .gold-amount {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .gold-card .gold-amount i {
+            color: #fbbf24;
+            font-size: 1rem;
+        }
+        
+        .gold-card .gold-amount input {
+            width: 90px;
+            background: #1e2048;
+            border: 1px solid #fbbf24;
+            border-radius: 0.6rem;
+            padding: 0.4rem;
+            color: #fbbf24;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .mvp-section-title {
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin: 0.8rem 0 0.6rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #333878;
+        }
+        
+        .mvp-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            margin-top: 0.5rem;
+        }
+        
+        .mvp-field {
+            background: #10122e;
+            border-radius: 0.8rem;
+            padding: 0.5rem;
+        }
+        
+        .mvp-field label {
+            font-size: 0.6rem;
+            color: #b1befa;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .mvp-field input {
+            background: #1e2048;
+            border: 1px solid #6c6fdc;
+            border-radius: 0.6rem;
+            padding: 0.4rem;
+            color: white;
+            width: 100%;
+            font-size: 0.7rem;
+        }
+        
+        .mvp-field input:focus {
+            outline: none;
+            border-color: #c084fc;
+        }
+        
+        .mvp-of-match-section {
+            background: linear-gradient(135deg, #1a1c4a, #12143a);
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin: 0.8rem 0;
+            border: 1px solid #fbbf24;
+        }
+        
+        .mvp-of-match-title {
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 0.6rem;
+        }
+        
+        .mvp-of-match-inputs {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .mvp-of-match-inputs input {
+            flex: 1;
+            background: #1e2048;
+            border: 1px solid #6c6fdc;
+            border-radius: 0.8rem;
+            padding: 0.6rem;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .kda-hint {
+            font-size: 0.6rem;
+            color: #a5b4fc;
+            text-align: center;
+            margin-top: 0.4rem;
+        }
+        
+        .match-actions {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .winner-badge {
+            background: linear-gradient(95deg, #f59e0b, #d97706);
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        
+        .waiting-text {
+            color: #f59e0b;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.5rem;
+            background: rgba(245, 158, 11, 0.1);
+            border-radius: 0.8rem;
+            margin: 0.5rem 0;
+        }
+        
+        .award-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            padding: 1rem;
+        }
+        .award-tile {
+            background: linear-gradient(145deg, #181c42, #0f112f);
+            border-radius: 1.2rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #facc15;
+        }
+        .award-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffd966, #ffb347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(12px);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal-card {
+            background: #0d0e29;
+            border-radius: 1.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.2rem;
+        }
+        .player-card {
+            background: linear-gradient(135deg, #121439, #0e102c);
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            border: 1px solid #4f46e5;
+        }
+        .player-name-input {
+            background: #1e2048;
+            border: 1px solid #6c6fdc;
+            border-radius: 0.8rem;
+            padding: 0.6rem;
+            color: white;
+            width: 100%;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+        }
+        .stat-box {
+            text-align: center;
+            background: #080a1e;
+            border-radius: 0.8rem;
+            padding: 0.5rem;
+        }
+        .stat-box label {
+            display: block;
+            font-size: 0.65rem;
+            color: #a5b4fc;
+            margin-bottom: 0.3rem;
+        }
+        .stat-box input {
+            background: #1e2048;
+            border: 1px solid #6c6fdc;
+            border-radius: 0.6rem;
+            padding: 0.4rem;
+            color: white;
+            width: 100%;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .team-controls {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 1rem;
+        }
+        
+        .team-count-input {
+            background: #1e2048;
+            border: 1px solid #6c6fdc;
+            border-radius: 1rem;
+            padding: 0.5rem;
+            color: white;
+            width: 80px;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .button-group { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; }
+        
+        .teams-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .team-input-item {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .team-input-item input {
+            flex: 1;
+            background: #1e2048;
+            border: 1px solid #6c6fdc;
+            border-radius: 0.8rem;
+            padding: 0.5rem;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .team-input-item span {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #c084fc;
+            width: 30px;
+        }
+        
+        .toast-message {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 150;
+            animation: fadeOut 2s ease forwards;
+            pointer-events: none;
+        }
+        
+        .toast-message.error { background: #ef4444; }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            70% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+        
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(12px);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .confirm-card {
+            background: #0d0e29;
+            border-radius: 1.5rem;
+            max-width: 350px;
+            width: 100%;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid #ef4444;
+        }
+        .confirm-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        .view-mode-badge {
+            position: fixed;
+            bottom: 70px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.6rem;
+            color: #fbbf24;
+            z-index: 99;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 550px) {
+            .team-names { flex-direction: column; }
+            .gold-section { flex-direction: column; align-items: center; }
+            .mvp-grid { grid-template-columns: 1fr; }
+            .award-grid { grid-template-columns: 1fr; }
+            .teams-list { grid-template-columns: 1fr; }
+            .mvp-of-match-inputs { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="hero">
+        <div class="logo-area">
+            <h1><i class="fas fa-crown"></i> SHADOW LEGENDS</h1>
+            <p>PRO TOURNAMENT MANAGER</p>
+        </div>
+        <div class="secret-hint" id="secretHint">
+            <i class="fas fa-shield-alt"></i> ADMIN PANEL
+        </div>
+        <div class="admin-bar" id="adminBar">
+            <div class="mode-switch">
+                <button id="enableEditBtn" class="mode-btn"><i class="fas fa-pen"></i> EDIT</button>
+                <button id="disableEditBtn" class="mode-btn active"><i class="fas fa-eye"></i> VIEW</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="standingsPage" class="page active-page">
+        <div class="glass-card">
+            <div class="card-header"><i class="fas fa-chart-line"></i> GROUP STANDINGS</div>
+            <div class="table-wrapper">
+                <table class="standings-table">
+                    <thead><tr><th>#</th><th>TEAM</th><th>MP</th><th>2:0</th><th>2:1</th><th>PTS</th><th>💰 GOLD</th><th></th></tr></thead>
+                    <tbody id="standingsBody"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="glass-card" style="padding: 1rem;">
+            <div class="team-controls">
+                <label><i class="fas fa-users"></i> TEAM COUNT:</label>
+                <input type="number" id="teamCount" class="team-count-input" min="4" max="32" value="4">
+                <button id="applyTeamCountBtn" class="btn-primary"><i class="fas fa-sync-alt"></i> APPLY & START</button>
+            </div>
+            <div id="teamNamesContainer" class="teams-list"></div>
+            <div class="button-group" style="margin-top: 1rem;">
+                <button class="btn-danger" id="resetAllBtn"><i class="fas fa-trash-alt"></i> FULL RESET</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="groupmatchesPage" class="page">
+        <div class="glass-card">
+            <div class="card-header"><i class="fas fa-gamepad"></i> GROUP MATCHES</div>
+            <div id="groupMatchesList" class="matches-container">Loading...</div>
+        </div>
+    </div>
+
+    <div id="bracketPage" class="page">
+        <div class="glass-card">
+            <div class="card-header"><i class="fas fa-diagram-project"></i> KNOCKOUT BRACKET</div>
+            <div id="bracketContainer" class="matches-container">Loading...</div>
+        </div>
+    </div>
+
+    <div id="teamstatsPage" class="page">
+        <div class="glass-card">
+            <div class="card-header"><i class="fas fa-users"></i> PLAYER STATS</div>
+            <div id="teamButtonsContainer" style="padding: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;"></div>
+        </div>
+    </div>
+
+    <div id="awardsPage" class="page">
+        <div class="glass-card">
+            <div class="card-header"><i class="fas fa-medal"></i> TOURNAMENT AWARDS</div>
+            <div id="awardsContainer" class="award-grid">Loading...</div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <button class="nav-btn active" data-page="standings"><i class="fas fa-trophy"></i><span>STANDINGS</span></button>
+    <button class="nav-btn" data-page="groupmatches"><i class="fas fa-gamepad"></i><span>MATCHES</span></button>
+    <button class="nav-btn" data-page="bracket"><i class="fas fa-diagram-project"></i><span>BRACKET</span></button>
+    <button class="nav-btn" data-page="teamstats"><i class="fas fa-users"></i><span>PLAYERS</span></button>
+    <button class="nav-btn" data-page="awards"><i class="fas fa-medal"></i><span>AWARDS</span></button>
+</div>
+
+<div class="view-mode-badge" id="modeBadge">👁️ VIEW MODE</div>
+
+<div id="teamModal" class="modal">
+    <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 id="modalTeamTitle" style="color: #c084fc;"><i class="fas fa-users"></i> Team Roster</h3>
+            <button class="btn-secondary" id="closeModalBtn"><i class="fas fa-times"></i> CLOSE</button>
+        </div>
+        <div id="modalBody"></div>
+        <button id="saveTeamStatsBtn" class="btn-primary" style="margin-top: 1rem; width:100%"><i class="fas fa-save"></i> SAVE STATS</button>
+    </div>
+</div>
+
+<div id="confirmResetModal" class="confirm-modal">
+    <div class="confirm-card">
+        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: #fca5a5;"></i>
+        <h3>⚠️ FULL RESET</h3>
+        <p>Are you sure? This will erase ALL match results, gold, MVP awards, and player stats!</p>
+        <div class="confirm-buttons">
+            <button id="confirmResetBtn" class="btn-danger">YES, RESET</button>
+            <button id="cancelResetBtn" class="btn-secondary">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== 🔐 امنیت ادمین - رمز: DS1385 ==========
+    const ADMIN_PASSWORD = "DS1385";
+    let isAdminAuthenticated = false;
+    let editMode = false;  // حالت پیش‌فرض: VIEW
+    let adminPanelVisible = false;
+
+    function checkAdminAuth() {
+        if (isAdminAuthenticated) return true;
+        let pass = prompt("🔐 لطفاً رمز پنل مدیریت را وارد کنید:");
+        if (pass === ADMIN_PASSWORD) {
+            isAdminAuthenticated = true;
+            showToast("✅ دسترسی ادمین تأیید شد - حالت EDIT فعال شد");
+            return true;
+        } else {
+            showToast("❌ رمز اشتباه است! دسترسی محدود به حالت VIEW", true);
+            return false;
+        }
+    }
+
+    function requireEditAuth() {
+        if (!isAdminAuthenticated) {
+            showToast("🔒 فقط ادمین می‌تواند ویرایش کند. روی ADMIN PANEL دوبار کلیک کنید", true);
+            return false;
+        }
+        return true;
+    }
+    // ================================================
+
+    // DATA
+    let teams = [];
+    let matches = [];
+    let teamStats = {};
+    let matchMVPs = {};
+    let matchGold = {};
+
+    function showToast(message, isError = false) {
+        let toast = document.createElement("div");
+        toast.className = `toast-message ${isError ? 'error' : ''}`;
+        toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i> ${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    function generateDefaultTeamNames(count) {
+        const prefixes = ["Shadow", "Frost", "Night", "Crimson", "Iron", "Storm", "Phoenix", "Dragon", "Titan", "Viper", "Wolf", "Eagle", "Thunder", "Blaze", "Frostbite", "Darkness", "Lightbringer", "Soul", "Crystal", "Arcane", "Mystic", "Rune", "Steel", "Bronze", "Silver", "Golden", "Royal", "Ancient", "Eternal", "Void", "Abyss", "Inferno"];
+        const suffixes = ["Legion", "Wraiths", "Reapers", "Fangs", "Guardians", "Hunters", "Warriors", "Mages", "Rogues", "Paladins", "Assassins", "Druids", "Shamans", "Berserkers", "Archers", "Knights"];
+        let names = [];
+        for (let i = 0; i < count; i++) {
+            names.push(`${prefixes[i % prefixes.length]} ${suffixes[i % suffixes.length]}`);
+        }
+        return names;
+    }
+
+    function renderTeamNameInputs() {
+        let container = document.getElementById("teamNamesContainer");
+        let count = parseInt(document.getElementById("teamCount").value) || 4;
+        count = Math.min(32, Math.max(4, count));
+        container.innerHTML = "";
+        for (let i = 0; i < count; i++) {
+            container.innerHTML += `<div class="team-input-item"><span>${i+1}.</span><input type="text" id="teamName_${i}" value="${generateDefaultTeamNames(count)[i]}" ${!editMode ? 'disabled' : ''}></div>`;
+        }
+    }
+
+    function getTeamNamesFromInputs() {
+        let count = parseInt(document.getElementById("teamCount").value) || 4;
+        count = Math.min(32, Math.max(4, count));
+        let names = [];
+        for (let i = 0; i < count; i++) {
+            let input = document.getElementById(`teamName_${i}`);
+            names.push(input?.value.trim() || `Team ${i+1}`);
+        }
+        return names;
+    }
+
+    function generateGroupMatches(teamList) {
+        let id = 1;
+        let arr = [];
+        for (let i = 0; i < teamList.length; i++) {
+            for (let j = i + 1; j < teamList.length; j++) {
+                arr.push({ id: id++, teamA: teamList[i], teamB: teamList[j], scoreA: null, scoreB: null, isPlayed: false, matchType: "group", winner: null });
+            }
+        }
+        return arr;
+    }
+
+    function generateKnockoutBracket(standingsArr) {
+        let brackets = [];
+        let bracketId = 100;
+        if (!standingsArr || standingsArr.length < 4) return [];
+        let ordered = standingsArr.map(s => s.team);
+        brackets.push({ id: bracketId++, teamA: ordered[0], teamB: ordered[1], scoreA: null, scoreB: null, isPlayed: false, round: "SEMI-FINAL 1", matchType: "bracket", winner: null });
+        brackets.push({ id: bracketId++, teamA: ordered[2], teamB: ordered[3], scoreA: null, scoreB: null, isPlayed: false, round: "SEMI-FINAL 2", matchType: "bracket", winner: null });
+        brackets.push({ id: bracketId++, teamA: null, teamB: null, scoreA: null, scoreB: null, isPlayed: false, round: "GRAND FINAL", matchType: "bracket", winner: null });
+        return brackets;
+    }
+
+    function computeStandings() {
+        let stats = {};
+        teams.forEach(t => { stats[t] = { played: 0, win2_0: 0, win2_1: 0, points: 0, gold: 0 }; });
+        matches.forEach(m => {
+            if (m.matchType !== "group" || !m.isPlayed || m.scoreA === null) return;
+            let { teamA, teamB, scoreA, scoreB } = m;
+            if (scoreA === 2 && scoreB === 0) { stats[teamA].win2_0++; stats[teamA].points += 3; }
+            else if (scoreA === 2 && scoreB === 1) { stats[teamA].win2_1++; stats[teamA].points += 2; stats[teamB].points += 1; }
+            else if (scoreA === 1 && scoreB === 2) { stats[teamA].points += 1; stats[teamB].win2_1++; stats[teamB].points += 2; }
+            else if (scoreA === 0 && scoreB === 2) { stats[teamB].win2_0++; stats[teamB].points += 3; }
+            stats[teamA].played++; stats[teamB].played++;
+            if (matchGold[m.id]) {
+                stats[teamA].gold += matchGold[m.id].teamA || 0;
+                stats[teamB].gold += matchGold[m.id].teamB || 0;
+            }
+        });
+        return teams.map(t => ({ team: t, ...stats[t] })).sort((a, b) => b.points - a.points);
+    }
+
+    function isGroupStageComplete() {
+        let groupMatches = matches.filter(m => m.matchType === "group");
+        return groupMatches.length > 0 && groupMatches.every(m => m.isPlayed === true);
+    }
+
+    function updateFinalParticipants() {
+        let bracket = matches.filter(m => m.matchType === "bracket");
+        let semi1 = bracket.find(m => m.round === "SEMI-FINAL 1");
+        let semi2 = bracket.find(m => m.round === "SEMI-FINAL 2");
+        let finalM = bracket.find(m => m.round === "GRAND FINAL");
+        if (semi1?.isPlayed && semi1.winner) finalM.teamA = semi1.winner;
+        else finalM.teamA = null;
+        if (semi2?.isPlayed && semi2.winner) finalM.teamB = semi2.winner;
+        else finalM.teamB = null;
+    }
+
+    function saveMatchScore(matchId, scoreA, scoreB, goldA, goldB, mvpsData) {
+        if (!editMode) { showToast("🔒 حالت VIEW - برای ویرایش وارد پنل ادمین شوید", true); return false; }
+        if (!requireEditAuth()) return false;
+        
+        let match = matches.find(m => m.id === matchId);
+        if (!match) return false;
+        let a = parseInt(scoreA), b = parseInt(scoreB);
+        if ((a === 2 && b === 0) || (a === 2 && b === 1) || (a === 1 && b === 2) || (a === 0 && b === 2)) {
+            match.scoreA = a; match.scoreB = b; match.isPlayed = true;
+            match.winner = (a > b) ? match.teamA : match.teamB;
+            matchGold[matchId] = { teamA: parseInt(goldA) || 0, teamB: parseInt(goldB) || 0 };
+            matchMVPs[matchId] = mvpsData || {};
+            if (match.matchType === "bracket") {
+                updateFinalParticipants();
+            }
+            refreshAll();
+            showToast(`✅ ذخیره شد: ${match.teamA} ${a}:${b} ${match.teamB}`);
+            return true;
+        }
+        showToast("❌ امتیاز نامعتبر! امتیازات مجاز: 2:0, 2:1, 1:2, 0:2", true);
+        return false;
+    }
+
+    function renderStandings() {
+        let standings = computeStandings();
+        let tbody = document.getElementById("standingsBody");
+        if (!teams.length) { tbody.innerHTML = '<tr><td colspan="8">برای شروع روی APPLY & START کلیک کنید!</td></tr>'; return; }
+        tbody.innerHTML = "";
+        standings.forEach((s, idx) => {
+            tbody.innerHTML += `<tr>
+                <td style="font-weight:800">${idx+1}</td>
+                <td style="text-align:left">${s.team}</td>
+                <td>${s.played}</td>
+                <td>${s.win2_0}</td>
+                <td>${s.win2_1}</td>
+                <td><span style="background:#4f46e5; padding:0.2rem 0.5rem; border-radius:1rem;">${s.points}</span></td>
+                <td>💰 ${s.gold}</td>
+                <td><button class="btn-secondary view-team-btn" data-team="${s.team}" style="padding:0.2rem 0.5rem;"><i class="fas fa-users"></i></button></td>
+            </tr>`;
+        });
+        document.querySelectorAll(".view-team-btn").forEach(btn => btn.addEventListener("click", () => openTeamModal(btn.dataset.team)));
+    }
+
+    function renderMatch(m, isBracket = false) {
+        let mvps = matchMVPs[m.id] || {};
+        let golds = matchGold[m.id] || {};
+        let roundText = isBracket ? `<div style="font-size:0.7rem; color:#c084fc; margin-bottom:0.5rem;">${m.round}</div>` : '';
+        let isEditable = editMode && isAdminAuthenticated && m.teamA && m.teamB;
+        
+        let div = document.createElement("div");
+        div.className = `match-card ${m.isPlayed ? 'played' : ''}`;
+        div.innerHTML = `
+            ${roundText}
+            <div class="vs-container">
+                <div class="team-names">
+                    <div class="team-box"><div class="team-name">${m.teamA || 'TBD'}</div></div>
+                    <div class="vs-divider">VS</div>
+                    <div class="team-box"><div class="team-name">${m.teamB || 'TBD'}</div></div>
+                </div>
+                ${m.isPlayed ? `<div class="winner-badge"><i class="fas fa-crown"></i> WINNER: ${m.winner}</div>` : ''}
+            </div>
+            <div class="score-section">
+                <div class="score-input-group"><label>SCORE</label><input type="number" class="score-inp score-a" value="${m.scoreA !== null ? m.scoreA : ''}" placeholder="0" ${!isEditable ? 'disabled' : ''}></div>
+                <span style="font-weight:800">:</span>
+                <div class="score-input-group"><input type="number" class="score-inp score-b" value="${m.scoreB !== null ? m.scoreB : ''}" placeholder="0" ${!isEditable ? 'disabled' : ''}><label>SCORE</label></div>
+            </div>
+            <div class="gold-section">
+                <div class="gold-card">
+                    <div class="team-name-small"><i class="fas fa-flag-checkered"></i> ${m.teamA || 'TBD'}</div>
+                    <div class="gold-amount">
+                        <i class="fas fa-coins"></i>
+                        <input type="number" class="gold-a" value="${golds.teamA || 0}" placeholder="Gold" ${!isEditable ? 'disabled' : ''}>
+                    </div>
+                </div>
+                <div class="gold-card">
+                    <div class="team-name-small"><i class="fas fa-flag-checkered"></i> ${m.teamB || 'TBD'}</div>
+                    <div class="gold-amount">
+                        <i class="fas fa-coins"></i>
+                        <input type="number" class="gold-b" value="${golds.teamB || 0}" placeholder="Gold" ${!isEditable ? 'disabled' : ''}>
+                    </div>
+                </div>
+            </div>
+            <div class="mvp-section-title"><i class="fas fa-star"></i> MATCH MVP STATS <i class="fas fa-star"></i></div>
+            <div class="mvp-grid">
+                <div class="mvp-field"><label><i class="fas fa-gem"></i> RICHEST MAN (Most Gold)</label><input type="text" class="mvp-richest" placeholder="Player name" value="${mvps.richest || ''}" ${!isEditable ? 'disabled' : ''}><input type="text" class="mvp-richest-val" placeholder="Gold amount" value="${mvps.richestVal || ''}" style="margin-top:4px" ${!isEditable ? 'disabled' : ''}></div>
+                <div class="mvp-field"><label><i class="fas fa-bolt"></i> BEST DAMAGE DEALER (Most Dmg)</label><input type="text" class="mvp-dmg" placeholder="Player name" value="${mvps.dmg || ''}" ${!isEditable ? 'disabled' : ''}><input type="text" class="mvp-dmg-val" placeholder="Damage dealt" value="${mvps.dmgVal || ''}" style="margin-top:4px" ${!isEditable ? 'disabled' : ''}></div>
+                <div class="mvp-field"><label><i class="fas fa-shield-alt"></i> BEST SAND BAG (Most Dmg Taken)</label><input type="text" class="mvp-tank" placeholder="Player name" value="${mvps.tank || ''}" ${!isEditable ? 'disabled' : ''}><input type="text" class="mvp-tank-val" placeholder="Damage taken" value="${mvps.tankVal || ''}" style="margin-top:4px" ${!isEditable ? 'disabled' : ''}></div>
+                <div class="mvp-field"><label><i class="fas fa-hand-peace"></i> BEST WINGMAN (Most Assists)</label><input type="text" class="mvp-wing" placeholder="Player name" value="${mvps.wing || ''}" ${!isEditable ? 'disabled' : ''}><input type="text" class="mvp-wing-val" placeholder="Assists" value="${mvps.wingVal || ''}" style="margin-top:4px" ${!isEditable ? 'disabled' : ''}></div>
+            </div>
+            <div class="mvp-of-match-section">
+                <div class="mvp-of-match-title"><i class="fas fa-trophy"></i> MVP OF THE MATCH <i class="fas fa-trophy"></i></div>
+                <div class="mvp-of-match-inputs">
+                    <input type="text" class="mvp-player-name" placeholder="Player name" value="${mvps.mvpName || ''}" ${!isEditable ? 'disabled' : ''}>
+                    <input type="text" class="mvp-player-kda" placeholder="K/D/A (e.g., 12/3/2)" value="${mvps.mvpKda || ''}" ${!isEditable ? 'disabled' : ''}>
+                </div>
+                <div class="kda-hint"><i class="fas fa-info-circle"></i> Format: Kills/Deaths/Assists (example: 12/3/2)</div>
+            </div>
+            <div class="match-actions">
+                <button class="btn-success save-match-btn" data-match-id="${m.id}" ${!isEditable ? 'disabled' : ''}><i class="fas fa-save"></i> SAVE MATCH</button>
+            </div>
+        `;
+        return div;
+    }
+
+    function renderGroupMatches() {
+        let container = document.getElementById("groupMatchesList");
+        let group = matches.filter(m => m.matchType === "group");
+        if (!group.length) { container.innerHTML = "<div style='text-align:center;padding:2rem'>هنوز مسابقه‌ای وجود ندارد. روی APPLY & START کلیک کنید!</div>"; return; }
+        container.innerHTML = "";
+        group.forEach(m => {
+            container.appendChild(renderMatch(m, false));
+        });
+        attachSaveEvents();
+    }
+
+    function renderBracketMatches() {
+        let container = document.getElementById("bracketContainer");
+        let bracket = matches.filter(m => m.matchType === "bracket");
+        
+        if (!isGroupStageComplete()) {
+            container.innerHTML = "<div style='text-align:center;padding:2rem'><div class='waiting-text'><i class='fas fa-hourglass-half'></i> در انتظار اتمام مرحله گروهی...</div></div>";
+            return;
+        }
+        
+        if (!bracket.length || bracket.length === 0) {
+            container.innerHTML = "<div style='text-align:center;padding:2rem'>مسابقه حذفی موجود نیست</div>";
+            return;
+        }
+        
+        container.innerHTML = "";
+        bracket.forEach(m => {
+            container.appendChild(renderMatch(m, true));
+        });
+        attachSaveEvents();
+    }
+
+    function attachSaveEvents() {
+        document.querySelectorAll(".save-match-btn").forEach(btn => {
+            btn.removeEventListener("click", handleSaveClick);
+            btn.addEventListener("click", handleSaveClick);
+        });
+    }
+
+    function handleSaveClick(e) {
+        let mid = parseInt(e.currentTarget.dataset.matchId);
+        let parent = e.currentTarget.closest(".match-card");
+        let scoreA = parent.querySelector(".score-a")?.value;
+        let scoreB = parent.querySelector(".score-b")?.value;
+        let goldA = parent.querySelector(".gold-a")?.value;
+        let goldB = parent.querySelector(".gold-b")?.value;
+        let mvpsData = {
+            richest: parent.querySelector(".mvp-richest")?.value || "",
+            richestVal: parent.querySelector(".mvp-richest-val")?.value || "",
+            dmg: parent.querySelector(".mvp-dmg")?.value || "",
+            dmgVal: parent.querySelector(".mvp-dmg-val")?.value || "",
+            tank: parent.querySelector(".mvp-tank")?.value || "",
+            tankVal: parent.querySelector(".mvp-tank-val")?.value || "",
+            wing: parent.querySelector(".mvp-wing")?.value || "",
+            wingVal: parent.querySelector(".mvp-wing-val")?.value || "",
+            mvpName: parent.querySelector(".mvp-player-name")?.value || "",
+            mvpKda: parent.querySelector(".mvp-player-kda")?.value || ""
+        };
+        saveMatchScore(mid, scoreA, scoreB, goldA, goldB, mvpsData);
+    }
+
+    function renderAwards() {
+        let totalKills = {}, totalAssists = {}, teamGold = {};
+        teams.forEach(t => teamGold[t] = 0);
+        matches.forEach(m => { if(matchGold[m.id]){ teamGold[m.teamA] += matchGold[m.id].teamA || 0; teamGold[m.teamB] += matchGold[m.id].teamB || 0; } });
+        teams.forEach(team => { if(teamStats[team]?.players) teamStats[team].players.forEach(p => { totalKills[p.name] = (totalKills[p.name] || 0) + (p.kills || 0); totalAssists[p.name] = (totalAssists[p.name] || 0) + (p.assists || 0); }); });
+        let bestKiller = { name: "-", kills: 0 }, bestAssist = { name: "-", assists: 0 }, richestTeam = { team: "-", gold: 0 };
+        for (let [n,k] of Object.entries(totalKills)) if (k > bestKiller.kills) bestKiller = { name: n, kills: k };
+        for (let [n,a] of Object.entries(totalAssists)) if (a > bestAssist.assists) bestAssist = { name: n, assists: a };
+        for (let [t,g] of Object.entries(teamGold)) if (g > richestTeam.gold) richestTeam = { team: t, gold: g };
+        let finalMatch = matches.find(m => m.matchType === "bracket" && m.round === "GRAND FINAL");
+        let champion = finalMatch?.isPlayed ? finalMatch.winner : null;
+        document.getElementById("awardsContainer").innerHTML = `
+            <div class="award-tile"><div class="award-name"><i class="fas fa-crown"></i> ${champion || 'TBD'}</div><div>TOURNAMENT CHAMPION</div></div>
+            <div class="award-tile"><div class="award-name">⚔️ ${bestKiller.name}</div><div>${bestKiller.kills} KILLS</div></div>
+            <div class="award-tile"><div class="award-name">🤝 ${bestAssist.name}</div><div>${bestAssist.assists} ASSISTS</div></div>
+            <div class="award-tile"><div class="award-name">💰 ${richestTeam.team}</div><div>${richestTeam.gold} GOLD</div></div>
+        `;
+    }
+
+    function renderTeamButtons() {
+        let container = document.getElementById("teamButtonsContainer");
+        if(!teams.length) { container.innerHTML = "<i>هنوز تیمی وجود ندارد</i>"; return; }
+        container.innerHTML = teams.map(t => `<button class="btn-secondary team-stat-btn" data-team="${t}"><i class="fas fa-users"></i> ${t}</button>`).join('');
+        document.querySelectorAll(".team-stat-btn").forEach(btn => btn.addEventListener("click", () => openTeamModal(btn.dataset.team)));
+    }
+
+    function openTeamModal(teamName) {
+        if(!teamStats[teamName]) teamStats[teamName] = { players: [] };
+        if(teamStats[teamName].players.length === 0) {
+            for(let i=1;i<=5;i++) teamStats[teamName].players.push({ name: `Player ${i}`, kills: 0, assists: 0, rating: 0 });
+        }
+        let modal = document.getElementById("teamModal");
+        document.getElementById("modalTeamTitle").innerHTML = `<i class="fas fa-edit"></i> ${teamName}`;
+        let html = "";
+        let isEditable = editMode && isAdminAuthenticated;
+        teamStats[teamName].players.forEach((p,idx) => {
+            html += `<div class="player-card"><input type="text" id="pName_${idx}" class="player-name-input" value="${p.name}" ${!isEditable ? 'disabled' : ''}><div class="stats-row"><div class="stat-box"><label>🔪 KILLS</label><input type="number" id="pKill_${idx}" value="${p.kills}" ${!isEditable ? 'disabled' : ''}></div><div class="stat-box"><label>🤝 ASSISTS</label><input type="number" id="pAssist_${idx}" value="${p.assists}" ${!isEditable ? 'disabled' : ''}></div><div class="stat-box"><label>⭐ RATING</label><input type="number" step="0.1" id="pRating_${idx}" value="${p.rating}" ${!isEditable ? 'disabled' : ''}></div></div></div>`;
+        });
+        document.getElementById("modalBody").innerHTML = html;
+        modal.style.display = "flex";
+        window.currentTeamModal = teamName;
+    }
+
+    function saveTeamStats() {
+        if (!editMode) { showToast("🔒 حالت VIEW - برای ویرایش وارد پنل ادمین شوید", true); return; }
+        if (!requireEditAuth()) return;
+        
+        let team = window.currentTeamModal;
+        for (let i = 0; i < 5; i++) {
+            let name = document.getElementById(`pName_${i}`)?.value;
+            let kills = document.getElementById(`pKill_${i}`)?.value;
+            let assists = document.getElementById(`pAssist_${i}`)?.value;
+            let rating = document.getElementById(`pRating_${i}`)?.value;
+            if (!teamStats[team].players[i]) teamStats[team].players[i] = {};
+            if (name) teamStats[team].players[i].name = name;
+            teamStats[team].players[i].kills = parseFloat(kills) || 0;
+            teamStats[team].players[i].assists = parseFloat(assists) || 0;
+            teamStats[team].players[i].rating = parseFloat(rating) || 0;
+        }
+        saveToLocalStorage();
+        showToast("✅ آمار ذخیره شد!");
+        document.getElementById("teamModal").style.display = "none";
+        renderAwards();
+    }
+
+    function applyAndStartTournament() {
+        if (!editMode) { showToast("🔒 حالت VIEW - برای شروع تورنمنت وارد پنل ادمین شوید", true); return; }
+        if (!requireEditAuth()) return;
+        
+        let teamNames = getTeamNamesFromInputs();
+        teams = [...teamNames];
+        let groupMatches = generateGroupMatches(teams);
+        let bracketMatches = generateKnockoutBracket(computeStandings());
+        matches = [...groupMatches, ...bracketMatches];
+        matchMVPs = {};
+        matchGold = {};
+        teamStats = {};
+        refreshAll();
+        showToast(`✅ تورنمنت با ${teams.length} تیم شروع شد!`);
+    }
+
+    function fullReset() {
+        if (!editMode) { showToast("🔒 حالت VIEW - برای ریست وارد پنل ادمین شوید", true); return; }
+        if (!requireEditAuth()) return;
+        
+        let teamNames = getTeamNamesFromInputs();
+        teams = [...teamNames];
+        let groupMatches = generateGroupMatches(teams);
+        let bracketMatches = generateKnockoutBracket(computeStandings());
+        matches = [...groupMatches, ...bracketMatches];
+        matchMVPs = {};
+        matchGold = {};
+        teamStats = {};
+        refreshAll();
+        showToast("✅ ریست کامل انجام شد!");
+    }
+
+    function refreshAll() {
+        if (!teams.length) {
+            renderStandings();
+            renderGroupMatches();
+            renderBracketMatches();
+            renderTeamButtons();
+            renderAwards();
+            return;
+        }
+        if (isGroupStageComplete()) {
+            let standings = computeStandings();
+            let newBracket = generateKnockoutBracket(standings);
+            let oldBracket = matches.filter(m => m.matchType === "bracket");
+            newBracket.forEach(newM => {
+                let old = oldBracket.find(o => o.round === newM.round);
+                if (old?.isPlayed) {
+                    newM.scoreA = old.scoreA;
+                    newM.scoreB = old.scoreB;
+                    newM.isPlayed = old.isPlayed;
+                    newM.winner = old.winner;
+                    if (matchGold[old.id]) {
+                        matchGold[newM.id] = matchGold[old.id];
+                    }
+                    if (matchMVPs[old.id]) {
+                        matchMVPs[newM.id] = matchMVPs[old.id];
+                    }
+                }
+            });
+            matches = [...matches.filter(m => m.matchType !== "bracket"), ...newBracket];
+        }
+        updateFinalParticipants();
+        renderStandings();
+        renderGroupMatches();
+        renderBracketMatches();
+        renderTeamButtons();
+        renderAwards();
+        saveToLocalStorage();
+    }
+
+    function saveToLocalStorage() { localStorage.setItem("ShadowTournamentFull", JSON.stringify({ teams, matches, teamStats, matchMVPs, matchGold })); }
+    
+    function loadFromLocalStorage() {
+        let data = localStorage.getItem("ShadowTournamentFull");
+        if (data) {
+            let p = JSON.parse(data);
+            teams = p.teams || [];
+            matches = p.matches || [];
+            teamStats = p.teamStats || {};
+            matchMVPs = p.matchMVPs || {};
+            matchGold = p.matchGold || {};
+            if (teams.length) refreshAll();
+        }
+    }
+
+    function setEditMode(mode) {
+        if (mode === true && !isAdminAuthenticated) {
+            showToast("🔒 ابتدا باید وارد پنل ادمین شوید. روی ADMIN PANEL دوبار کلیک کنید", true);
+            return;
+        }
+        editMode = mode;
+        document.getElementById("enableEditBtn").classList.toggle("active", mode);
+        document.getElementById("disableEditBtn").classList.toggle("active", !mode);
+        document.getElementById("modeBadge").innerHTML = mode ? "✏️ EDIT MODE" : "👁️ VIEW MODE";
+        document.getElementById("modeBadge").style.background = mode ? "rgba(79,70,229,0.9)" : "rgba(0,0,0,0.7)";
+        renderTeamNameInputs();
+        refreshAll();
+        showToast(mode ? "✏️ حالت ویرایش فعال شد" : "👁️ حالت مشاهده فعال شد");
+    }
+
+    function showResetConfirm() { 
+        if (!editMode) { showToast("🔒 حالت VIEW - برای ریست وارد پنل ادمین شوید", true); return; }
+        if (!requireEditAuth()) return;
+        document.getElementById("confirmResetModal").style.display = "flex"; 
+    }
+    function hideResetConfirm() { document.getElementById("confirmResetModal").style.display = "none"; }
+
+    // Event Listeners
+    document.getElementById("enableEditBtn").addEventListener("click", () => setEditMode(true));
+    document.getElementById("disableEditBtn").addEventListener("click", () => setEditMode(false));
+    document.getElementById("applyTeamCountBtn").addEventListener("click", () => { renderTeamNameInputs(); applyAndStartTournament(); });
+    document.getElementById("resetAllBtn").addEventListener("click", showResetConfirm);
+    document.getElementById("confirmResetBtn").addEventListener("click", () => { fullReset(); hideResetConfirm(); });
+    document.getElementById("cancelResetBtn").addEventListener("click", hideResetConfirm);
+    document.getElementById("closeModalBtn").addEventListener("click", () => document.getElementById("teamModal").style.display = "none");
+    document.getElementById("saveTeamStatsBtn").addEventListener("click", saveTeamStats);
+    
+    // امن: فقط با وارد کردن رمز، پنل ادمین نمایش داده می‌شود و EDIT فعال می‌گردد
+    document.getElementById("secretHint").addEventListener("dblclick", () => { 
+        if (checkAdminAuth()) {
+            adminPanelVisible = !adminPanelVisible; 
+            document.getElementById("adminBar").classList.toggle("visible", adminPanelVisible);
+            if (isAdminAuthenticated && !editMode) {
+                setEditMode(true);
+            }
+        }
+    });
+    
+    document.getElementById("confirmResetModal").addEventListener("click", (e) => { if(e.target === document.getElementById("confirmResetModal")) hideResetConfirm(); });
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click", () => {
+        document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".page").forEach(p=>p.classList.remove("active-page"));
+        document.getElementById(`${btn.dataset.page}Page`).classList.add("active-page");
+        if (btn.dataset.page === "bracket") {
+            renderBracketMatches();
+        }
+    }));
+
+    renderTeamNameInputs();
+    loadFromLocalStorage();
+    if (!teams.length) renderStandings();
+</script>
+</body>
+                                                              </html>
